@@ -1,44 +1,47 @@
-    <% layout("/layouts/boiler_plate")-%>
-    <div class="row mt-3">
-    <div class="col-8 offset-2">
+<% layout("/layouts/boiler_plate")-%>
+<div class="row mt-3">
+  <div class="col-8 offset-2">
     <h3>Edit your Listing</h3>
-    <form method="POST" action="/listings/<%=listing._id%>?_method=PUT">
-        <div class="mb-3">
-        <label for="title" class="form-label">Enter Title</label>
-        <input type="text" name="listing[title]" value="<%=listing.title%>" class="form-control" placeholder="Enter title">
-        </div>
-        <br/><br/>
-        <div class="mb-3"> 
-        <label for="description" class="form-label">Description</label>
-        <textarea type="text" name="listing[description]" class="form-control"></textarea><%=listing.description%> </textarea>
-        </div>
-        <br/><br/>
-        <div class="mb-3">
-        <div class="mb-3"> 
-        <label for="image" class="form-label">Image</label>         
-        <input type="text" name="listing[image]" value="<%= listing.image.url %>" class="form-control" placeholder="Enter image URL">
-        </div>
-        <br/><br/>
-        <div class="row">
-        <div class="mb-3 col-md-4">
-        <label for="Price" class="form-label">Price</label>
-        <input type="number" name="listing[price]" class="form-control" value="<%=listing.price%>" placeholder="Enter price">
-        </div>
-        </div>
-        <br/><br/>
-        <div class="mb-3 col-md-4">
-        <label for="Country" class="form-label">Country</label>
-        <input type="text" name="listing[country]" value="<%=listing.country%>" placeholder="Enter country">
-        </div>
-        </div>
-        <br/><br/>
-        <div class="mb-3">
-        <label for="Location" class="form-label">Location</label>
-        <input type="text" name="listing[location]" value="<%=listing.location%>" class="form-control" placeholder="Enter location">
-        
+    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation">
 
-                <br/><br/>
-        <button class="btn btn-dark edit-btn mt-3">Edit</button>
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" required name="listing[title]" value="<%= listing.title %>" class="form-control">
+        <div class="invalid-feedback">Please enter a title</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea required name="listing[description]" class="form-control"><%= listing.description %></textarea>
+        <div class="invalid-feedback">Please enter a description</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="image" class="form-label">Image URL</label>
+        <input type="text" required name="listing[image][url]" value="<%= listing.image.url %>" class="form-control">
+        <div class="invalid-feedback">Please enter a valid image link</div>
+      </div>
+
+      <div class="row">
+        <div class="mb-3 col-md-4">
+          <label for="price" class="form-label">Price</label>
+          <input type="text"  inputmode="numeric" pattern="[0-9]*" required name="listing[price]" value="<%= listing.price %>" class="form-control">
+          <div class="invalid-feedback">Please enter a valid price</div>
+        </div>
+        <div class="mb-3 col-md-8">
+          <label for="country" class="form-label">Country</label>
+          <input type="text" required name="listing[country]" value="<%= listing.country %>" class="form-control">
+          <div class="invalid-feedback">Please enter a country</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input type="text" required name="listing[location]" value="<%= listing.location %>" class="form-control">
+        <div class="invalid-feedback">Please enter a location</div>
+      </div>
+
+      <button class="btn btn-dark mt-3">Save Changes</button>
     </form>
-     </div>
-    </div>
+  </div>
+</div>
