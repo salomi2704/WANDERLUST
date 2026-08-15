@@ -1,6 +1,7 @@
-{"engines" :{
-"node" :  "24.16.0"
-},
+{
+  "engines": {
+    "node": "24.16.0"
+  },
   "name": "wanderlust",
   "version": "1.0.0",
   "description": "",
@@ -13,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cloudinary": "^2.10.0",
+    "cloudinary": "^1.41.3",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^6.0.0",
     "dotenv": "^17.4.2",
@@ -24,7 +25,7 @@
     "joi": "^18.1.2",
     "method-override": "^3.0.0",
     "mongoose": "^9.2.4",
-    "multer": "^2.2.0",
+    "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
