@@ -1,0 +1,12 @@
+# Exported from Render on 2026-08-15T22:16:33Z
+version: "1"
+services:
+- type: web
+  name: WANDERLUST_1
+  runtime: node
+  repo: https://github.com/salomi2704/WANDERLUST
+  plan: free
+  region: oregon
+  buildCommand: npm install
+  startCommand: node app.js
+  autoDeployTrigger: "off"
