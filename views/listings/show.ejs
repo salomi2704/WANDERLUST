@@ -9,6 +9,13 @@
       <p class="card-text">
         Owned by <i><%= listing.owner ? listing.owner.username : 'Unknown' %></i>
       </p>
+      <% if (listing.category) { %>
+        <p class="card-text mb-2">
+          <a href="/listings?category=<%= encodeURIComponent(listing.category) %>" class="badge bg-light text-dark border text-decoration-none px-3 py-2 rounded-pill">
+            <i class="fa-solid fa-tag text-danger me-1"></i> <%= listing.category %>
+          </a>
+        </p>
+      <% } %>
       <p class="card-text">
         <%= listing.description %><br>
         <% if (listing.price != null) { %>
@@ -82,4 +89,21 @@
     </div>
     <% } %>
   </div>
+
+  <div class="col-6 offset-3 mb-4">
+    <hr/>
+    <h4 class="mb-3">Where you'll be</h4>
+    <p class="text-muted mb-2"><i class="fa-solid fa-location-dot me-2 text-danger"></i><%= listing.location %>, <%= listing.country %></p>
+    <div id="map"></div>
+  </div>
 </div>
+
+<script>
+  const listingData = {
+    title: <%- JSON.stringify(listing.title) %>,
+    location: <%- JSON.stringify(listing.location) %>,
+    country: <%- JSON.stringify(listing.country) %>,
+    coordinates: <%- JSON.stringify(listing.geometry && listing.geometry.coordinates && listing.geometry.coordinates.length === 2 ? listing.geometry.coordinates : [77.2090, 28.6139]) %>
+  };
+</script>
+<script src="/js/map.js"></script>

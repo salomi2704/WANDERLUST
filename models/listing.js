@@ -32,7 +32,45 @@ const listingSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Review",
       },
-    ]
+    ],
+    geometry: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        required: true,
+      },
+      coordinates: {
+        type: [Number],
+        required: true,
+      },
+    },
+    category: {
+      type: String,
+      enum: [
+        "Trending",
+        "Rooms",
+        "Iconic Cities",
+        "Mountains",
+        "Castles",
+        "Amazing Pools",
+        "Camping",
+        "Farms",
+        "Arctic",
+        "Domes",
+        "Boats",
+        "Beachfront",
+        "trending",
+        "rooms",
+        "iconic cities",
+        "mountains",
+        "castles",
+        "pools",
+        "camp",
+        "farm",
+        "arctic"
+      ],
+      default: "Trending",
+    },
 });
 
 listingSchema.post("findOneAndDelete", async (listing) => {

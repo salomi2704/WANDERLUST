@@ -1,8 +1,30 @@
 const Listing = require("../models/listing");
+const { geocodeLocation } = require("../utils/geocoder");
 
 module.exports.index = async (req, res) => {
-  const allListings = await Listing.find({});
-  res.render("listings/index.ejs", { allListings });
+  const { category, search } = req.query;
+  let filter = {};
+
+  if (category && category !== "all") {
+    filter.category = { $regex: new RegExp(`^${category}$`, "i") };
+  }
+
+  if (search && search.trim() !== "") {
+    const searchRegex = { $regex: search.trim(), $options: "i" };
+    filter.$or = [
+      { title: searchRegex },
+      { location: searchRegex },
+      { country: searchRegex },
+      { category: searchRegex }
+    ];
+  }
+
+  const allListings = await Listing.find(filter);
+  res.render("listings/index.ejs", {
+    allListings,
+    selectedCategory: category || "all",
+    searchQuery: search || ""
+  });
 };
 
 module.exports.renderNewForm = (req, res) => {
@@ -22,12 +44,25 @@ module.exports.showListing = async (req, res) => {
     req.flash("error", "Listing you requested for doesn't exist!");
     return res.redirect("/listings");
   }
+
+  // If existing listing doesn't have coordinates in DB, geocode and save
+  if (!listing.geometry || !listing.geometry.coordinates || listing.geometry.coordinates.length < 2) {
+    const geoData = await geocodeLocation(listing.location, listing.country);
+    listing.geometry = geoData;
+    await listing.save();
+  }
+
   res.render("listings/show.ejs", { listing });
 };
 
 module.exports.createListing = async (req, res) => {
+  const geoData = await geocodeLocation(
+    req.body.listing.location,
+    req.body.listing.country
+  );
   const newListing = new Listing(req.body.listing);
   newListing.owner = req.user._id;
+  newListing.geometry = geoData;
   if (typeof req.file !== "undefined") {
     let url = req.file.path;
     let filename = req.file.filename;
@@ -45,7 +80,10 @@ module.exports.renderEditForm = async (req, res) => {
     req.flash("error", "Listing you requested for doesn't exist!");
     return res.redirect("/listings");
   }
-  res.render("listings/edit.ejs", { listing });
+  let originalImageUrl = listing.image.url;
+  originalImageUrl = originalImageUrl.replace("/upload","/upload/w_250");
+  res.render("listings/edit.ejs", { listing ,originalImageUrl});
+
 };
 
 module.exports.updateListing = async (req, res) => {
@@ -56,17 +94,26 @@ module.exports.updateListing = async (req, res) => {
     { new: true }
   );
 
-  if (typeof req.file !== "undefined") {
-    let url = req.file.path;
-    let filename = req.file.filename;
-    listing.image = { url, filename };
-    await listing.save();
-  }
-
   if (!listing) {
     req.flash("error", "Listing you requested for doesn't exist!");
     return res.redirect("/listings");
   }
+
+  if (req.body.listing && (req.body.listing.location || req.body.listing.country)) {
+    const geoData = await geocodeLocation(
+      listing.location,
+      listing.country
+    );
+    listing.geometry = geoData;
+  }
+
+  if (typeof req.file !== "undefined") {
+    let url = req.file.path;
+    let filename = req.file.filename;
+    listing.image = { url, filename };
+  }
+  await listing.save();
+
   req.flash("success", "Listing Updated!");
   res.redirect(`/listings/${id}`);
 };

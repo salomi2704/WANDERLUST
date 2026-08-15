@@ -115,3 +115,213 @@ height:30vh;
     border-radius: 0.5rem !important;
     padding: 0.5rem !important;
 }
+
+/* Map styling */
+#map {
+    height: 380px;
+    width: 100%;
+    border-radius: 1rem !important;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    z-index: 1;
+}
+
+.map-popup-content {
+    padding: 0.25rem 0.25rem;
+}
+
+.map-popup-content h6 {
+    color: #222;
+    margin-bottom: 0.25rem;
+}
+
+.map-popup-content p {
+    color: #717171;
+    font-size: 0.85rem;
+    margin-bottom: 0;
+}
+
+.leaflet-popup-content-wrapper {
+    border-radius: 0.75rem !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Category Filters Styling */
+.filters-wrapper {
+    position: relative;
+}
+
+.filters-scroll-container {
+    overflow: hidden;
+    position: relative;
+}
+
+#filters {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 1.75rem;
+    padding: 0.5rem 0.25rem 0.75rem 0.25rem;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+#filters::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.filter-link {
+    text-decoration: none;
+    color: #717171 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+}
+
+.filter {
+    text-align: center;
+    opacity: 0.7;
+    transition: all 0.2s ease-in-out;
+    padding-bottom: 0.25rem;
+    border-bottom: 2px solid transparent;
+}
+
+.filter:hover {
+    opacity: 1;
+    color: #000;
+    cursor: pointer;
+}
+
+.filter i {
+    font-size: 1.35rem;
+    margin-bottom: 0.4rem;
+}
+
+.filter p {
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.active-filter .filter {
+    opacity: 1;
+    color: #000 !important;
+    font-weight: 700;
+    border-bottom: 2px solid #000;
+}
+
+.active-filter {
+    color: #000 !important;
+}
+
+.filter-scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-scroll-btn:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    transform: translateY(-50%) scale(1.05);
+}
+
+.scroll-left {
+    left: -5px;
+}
+
+.scroll-right {
+    right: -5px;
+}
+
+.tax-toggle {
+    border: 1px solid #ddd;
+    border-radius: 1rem;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    background-color: #fff;
+}
+
+.tax-toggle:hover {
+    border-color: #000;
+}
+
+.listing-category-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    letter-spacing: 0.02em;
+}
+
+.navbar-search-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 auto;
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.search-bar-pill {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 2rem;
+    overflow: hidden;
+    background: #fff;
+    transition: all 0.2s ease-in-out;
+}
+
+.search-bar-pill:hover,
+.search-bar-pill:focus-within {
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12) !important;
+    border-color: #bbb;
+}
+
+.search-inp {
+    border: none !important;
+    font-size: 0.9rem;
+    background: transparent;
+    padding: 0.5rem 1rem;
+}
+
+.search-inp:focus {
+    box-shadow: none !important;
+    background: transparent;
+}
+
+.btn-search {
+    background-color: #fe424d;
+    color: #fff;
+    border: none;
+    border-radius: 50% !important;
+    width: 34px;
+    height: 34px;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4px 6px 4px 0;
+    transition: background-color 0.2s ease;
+}
+
+.btn-search:hover {
+    background-color: #e0323c;
+    color: #fff;
+}

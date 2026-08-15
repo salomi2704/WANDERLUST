@@ -1,23 +1,226 @@
 <% layout("/layouts/boiler_plate")-%>
-<body>
-  <h3>All Listings</h3>
-  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
-    <% for(let listing of allListings){ %>
-      <a href="/listings/<%= listing._id %>" class="listing-link">
-        <div class="card col listing-card" style="width: 20rem;">
-          <img src="<%= listing.image && listing.image.url ? listing.image.url : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3' %>" class="card-img-top" style="height:20rem" alt="listing_image">
-          <div class="card-body">
-            <p class="card-text">
-<% if (listing.price != null) { %>
-  &#8377;<%= Number(listing.price).toLocaleString("en-IN") %>/night
-<% } else { %>
-  <span>Price not available</span>
+
+<div class="filters-wrapper mb-4 mt-2">
+  <div class="filter-container d-flex align-items-center center justify-content-between">
+    <div class="filters-scroll-container position-relative flex-grow-1 me-3">
+      <button class="filter-scroll-btn scroll-left d-none" id="scrollLeftBtn" type="button" aria-label="Scroll left">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+
+      <div id="filters" class="d-flex align-items-center">
+        <a href="/listings" class="filter-link <%= !selectedCategory || selectedCategory === 'all' ? 'active-filter' : '' %>">
+          <div class="filter">
+            <i class="fa-solid fa-border-all"></i>
+            <p>All</p>
+          </div>
+        </a>
+
+        <a href="/listings?category=Trending" class="filter-link <%= selectedCategory && selectedCategory.toLowerCase() === 'trending' ? 'active-filter' : '' %>">
+          <div class="filter">
+            <i class="fa-solid fa-fire"></i>
+            <p>Trending</p>
+          </div>
+        </a>
+
+        <a href="/listings?category=Rooms" class="filter-link <%= selectedCategory && selectedCategory.toLowerCase() === 'rooms' ? 'active-filter' : '' %>">
+          <div class="filter">
+            <i class="fa-solid fa-bed"></i>
+            <p>Rooms</p>
+          </div>
+        </a>
+
+        <a href="/listings?category=Iconic Cities" class="filter-link <%= selectedCategory && selectedCategory.toLowerCase() === 'iconic cities' ? 'active-filter' : '' %>">
+          <div class="filter">
+            <i class="fa-solid fa-mountain-city"></i>
+            <p>Iconic Cities</p>
+          </div>
+        </a>
+
+        <a href="/listings?category=Mountains" class="filter-link <%= selectedCategory && selectedCategory.toLowerCase() === 'mountains' ? 'active-filter' : '' %>">
+          <div class="filter">
+            <i class="fa-solid fa-mountain"></i>
+            <p>Mountains</p>
+          </div>
+        </a>
+
+        <a href="/listings?category=Castles" class="filter-link <%= selectedCategory && selectedCategory.toLowerCase() === 'castles' ? 'active-filter' : '' %>">
+          <div class="filter">
+            <i class="fa-brands fa-fort-awesome"></i>
+            <p>Castles</p>
+          </div>
+        </a>
+
+        <a href="/listings?category=Amazing Pools" class="filter-link <%= selectedCategory && selectedCategory.toLowerCase() === 'amazing pools' ? 'active-filter' : '' %>">
+          <div class="filter">
+            <i class="fa-solid fa-person-swimming"></i>
+            <p>Amazing Pools</p>
+          </div>
+        </a>
+
+        <a href="/listings?category=Camping" class="filter-link <%= selectedCategory && selectedCategory.toLowerCase() === 'camping' ? 'active-filter' : '' %>">
+          <div class="filter">
+            <i class="fa-solid fa-campground"></i>
+            <p>Camping</p>
+          </div>
+        </a>
+
+        <a href="/listings?category=Farms" class="filter-link <%= selectedCategory && selectedCategory.toLowerCase() === 'farms' ? 'active-filter' : '' %>">
+          <div class="filter">
+            <i class="fa-solid fa-tractor"></i>
+            <p>Farms</p>
+          </div>
+        </a>
+
+        <a href="/listings?category=Arctic" class="filter-link <%= selectedCategory && selectedCategory.toLowerCase() === 'arctic' ? 'active-filter' : '' %>">
+          <div class="filter">
+            <i class="fa-solid fa-snowflake"></i>
+            <p>Arctic</p>
+          </div>
+        </a>
+
+        <a href="/listings?category=Domes" class="filter-link <%= selectedCategory && selectedCategory.toLowerCase() === 'domes' ? 'active-filter' : '' %>">
+          <div class="filter">
+            <i class="fa-solid fa-igloo"></i>
+            <p>Domes</p>
+          </div>
+        </a>
+
+        <a href="/listings?category=Boats" class="filter-link <%= selectedCategory && selectedCategory.toLowerCase() === 'boats' ? 'active-filter' : '' %>">
+          <div class="filter">
+            <i class="fa-solid fa-ship"></i>
+            <p>Boats</p>
+          </div>
+        </a>
+
+        <a href="/listings?category=Beachfront" class="filter-link <%= selectedCategory && selectedCategory.toLowerCase() === 'beachfront' ? 'active-filter' : '' %>">
+          <div class="filter">
+            <i class="fa-solid fa-umbrella-beach"></i>
+            <p>Beachfront</p>
+          </div>
+        </a>
+      </div>
+
+      <button class="filter-scroll-btn scroll-right" id="scrollRightBtn" type="button" aria-label="Scroll right">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <div class="tax-toggle">
+      <div class="form-check form-switch form-check-reverse m-0">
+        <input class="form-check-input" type="checkbox" role="switch" id="taxSwitch">
+        <label class="form-check-label small fw-semibold" for="taxSwitch">Display total after taxes</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% if (searchQuery || (selectedCategory && selectedCategory !== 'all')) { %>
+  <div class="category-status-bar d-flex align-items-center justify-content-between mb-3 px-3 py-2 bg-light rounded-3 border">
+    <div class="d-flex align-items-center flex-wrap gap-2">
+      <% if (selectedCategory && selectedCategory !== 'all') { %>
+        <span class="badge bg-dark rounded-pill px-3 py-2">
+          Category: <%= selectedCategory %>
+        </span>
+      <% } %>
+      <% if (searchQuery) { %>
+        <span class="text-muted small">Search: "<strong><%= searchQuery %></strong>"</span>
+      <% } %>
+    </div>
+    <a href="/listings" class="btn btn-sm btn-outline-secondary rounded-pill">
+      <i class="fa-solid fa-xmark me-1"></i>Clear all filters
+    </a>
+  </div>
 <% } %>
 
+<% if (allListings && allListings.length > 0) { %>
+  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4 mt-1 mb-5">
+    <% for(let listing of allListings){ %>
+      <a href="/listings/<%= listing._id %>" class="listing-link">
+        <div class="card col listing-card h-100">
+          <div class="listing-img-container position-relative">
+            <img src="<%= listing.image && listing.image.url ? listing.image.url : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3' %>" class="card-img-top" style="height:20rem" alt="listing_image">
+            <% if (listing.category) { %>
+              <span class="listing-category-badge position-absolute top-0 start-0 m-3 badge bg-white text-dark shadow-sm rounded-pill px-2 py-1">
+                <%= listing.category %>
+              </span>
+            <% } %>
+          </div>
+          <div class="card-body pt-2">
+            <p class="card-text mb-0 fw-bold text-dark">
+              <%= listing.title %>
+            </p>
+            <p class="card-text text-muted mb-0 small"><%= listing.location %>, <%= listing.country %></p>
+            <p class="card-text mt-2 mb-0">
+              <% if (listing.price != null) { %>
+                <span class="base-price fw-semibold">&#8377;<%= Number(listing.price).toLocaleString("en-IN") %> <span class="fw-normal text-muted">/ night</span></span>
+                <span class="tax-price d-none fw-semibold">&#8377;<%= Number(Math.round(listing.price * 1.18)).toLocaleString("en-IN") %> <span class="fw-normal text-muted">/ night (incl. 18% GST)</span></span>
+              <% } else { %>
+                <span class="text-muted">Price not available</span>
+              <% } %>
             </p>
           </div>
         </div>
       </a>
     <% } %>
   </div>
-</body>
+<% } else { %>
+  <div class="text-center my-5 py-5 border rounded-4 bg-light">
+    <i class="fa-regular fa-compass fa-3x text-muted mb-3"></i>
+    <h4>No listings found in <%= selectedCategory && selectedCategory !== 'all' ? selectedCategory : 'this search' %></h4>
+    <p class="text-muted">Try selecting another category or clear your search query.</p>
+    <a href="/listings" class="btn btn-dark rounded-pill px-4 mt-2">Explore all listings</a>
+  </div>
+<% } %>
+
+<script>
+  // Category Scroll Buttons
+  const filtersContainer = document.getElementById("filters");
+  const scrollLeftBtn = document.getElementById("scrollLeftBtn");
+  const scrollRightBtn = document.getElementById("scrollRightBtn");
+
+  function updateScrollButtons() {
+    if (!filtersContainer) return;
+    const maxScroll = filtersContainer.scrollWidth - filtersContainer.clientWidth;
+    if (filtersContainer.scrollLeft > 20) {
+      scrollLeftBtn.classList.remove("d-none");
+    } else {
+      scrollLeftBtn.classList.add("d-none");
+    }
+    if (filtersContainer.scrollLeft < maxScroll - 20) {
+      scrollRightBtn.classList.remove("d-none");
+    } else {
+      scrollRightBtn.classList.add("d-none");
+    }
+  }
+
+  if (filtersContainer && scrollLeftBtn && scrollRightBtn) {
+    filtersContainer.addEventListener("scroll", updateScrollButtons);
+    window.addEventListener("resize", updateScrollButtons);
+    setTimeout(updateScrollButtons, 200);
+
+    scrollLeftBtn.addEventListener("click", () => {
+      filtersContainer.scrollBy({ left: -250, behavior: "smooth" });
+    });
+
+    scrollRightBtn.addEventListener("click", () => {
+      filtersContainer.scrollBy({ left: 250, behavior: "smooth" });
+    });
+  }
+
+  // Tax Switch Toggle Script
+  const taxSwitch = document.getElementById("taxSwitch");
+  if (taxSwitch) {
+    taxSwitch.addEventListener("change", () => {
+      const basePrices = document.querySelectorAll(".base-price");
+      const taxPrices = document.querySelectorAll(".tax-price");
+
+      if (taxSwitch.checked) {
+        basePrices.forEach((el) => el.classList.add("d-none"));
+        taxPrices.forEach((el) => el.classList.remove("d-none"));
+      } else {
+        basePrices.forEach((el) => el.classList.remove("d-none"));
+        taxPrices.forEach((el) => el.classList.add("d-none"));
+      }
+    });
+  }
+</script>
