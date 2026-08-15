@@ -18,10 +18,12 @@
         <div class="invalid-feedback">Please enter a description</div>
       </div>
 
-        <div class="mb-3 ">
-          Original Listing Image <br/>
-          <img src="<%= originalImageUrl%>"/>
-      </div>
+      <% if (originalImageUrl) { %>
+        <div class="mb-3">
+          <label class="form-label d-block">Original Listing Image</label>
+          <img src="<%= originalImageUrl %>" class="img-thumbnail rounded" style="max-height: 200px; width: auto; object-fit: cover;" alt="Original Listing Image"/>
+        </div>
+      <% } %>
 
       <div class="mb-3">
         <label for="image" class="form-label">Upload New Image</label>
