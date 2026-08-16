@@ -344,10 +344,34 @@ button, .btn, .nav-link, .filter-link {
     white-space: nowrap;
     background-color: #ffffff;
     transition: border-color var(--transition-fast);
+    cursor: pointer;
 }
 
 .tax-toggle:hover {
     border-color: #000000;
+}
+
+.tax-toggle .form-check {
+    margin: 0;
+    width: 100%;
+}
+
+.tax-toggle .form-check-reverse {
+    padding-right: 3rem;
+    padding-left: 0;
+    text-align: left;
+}
+
+.tax-toggle .form-check-reverse .form-check-input {
+    float: right;
+    margin-right: -3rem;
+    margin-left: 0;
+    cursor: pointer;
+}
+
+.tax-toggle .form-check-label {
+    cursor: pointer;
+    user-select: none;
 }
 
 .tax-toggle .form-check-input:checked {
