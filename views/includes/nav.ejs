@@ -1,17 +1,20 @@
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-  <div class="container-fluid px-md-4">
-    <!-- Left Section: Brand & Explore -->
-    <div class="d-flex align-items-center">
-      <a class="navbar-brand me-3" href="/listings"><i class="fa-regular fa-compass"></i></a>
-      <a class="nav-link d-none d-md-inline-block fw-semibold" href="/listings">Explore</a>
+<nav class="navbar navbar-expand-md bg-white border-bottom sticky-top shadow-xs">
+  <div class="container-fluid px-3 px-md-4">
+    <!-- Top Row on Mobile / Left Section on Desktop: Brand -->
+    <div class="d-flex align-items-center justify-content-between nav-brand-wrapper">
+      <a class="navbar-brand d-flex align-items-center me-3" href="/listings">
+        <i class="fa-regular fa-compass me-2"></i>
+        <span class="brand-text fw-bold">wanderlust</span>
+      </a>
+      <a class="nav-link d-none d-md-inline-block fw-semibold explore-link" href="/listings">Explore</a>
     </div>
 
-    <!-- Center Section: Search Bar -->
-    <div class="navbar-search-center my-2 my-md-0">
-      <form class="d-flex" role="search" action="/listings" method="GET">
+    <!-- Center Section: Search Bar (Desktop / Tablet) -->
+    <div class="navbar-search-center d-none d-md-flex my-2 my-md-0">
+      <form class="d-flex w-100" role="search" action="/listings" method="GET">
         <div class="input-group search-bar-pill shadow-sm">
           <input class="form-control search-inp ps-3" type="search" name="search" placeholder="Search destinations, categories..." aria-label="Search">
-          <button class="btn btn-search px-3" type="submit">
+          <button class="btn btn-search" type="submit" aria-label="Search button">
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
@@ -19,27 +22,57 @@
     </div>
 
     <!-- Right Section: Navigation Links & Mobile Toggle -->
-    <div class="d-flex align-items-center">
+    <div class="nav-actions d-flex align-items-center ms-auto">
+      <a class="nav-link nav-host-link d-none d-sm-inline-block me-2 me-md-3" href="/listings/new">Airbnb your Home</a>
+
       <button
-       class="navbar-toggler ms-2 d-md-none" 
+       class="navbar-toggler ms-1 d-md-none border-0 shadow-none p-2 rounded-circle" 
        type="button" 
        data-bs-toggle="collapse" 
-       data-bs-target="#navbarNavAltMarkup">
+       data-bs-target="#navbarNavAltMarkup"
+       aria-controls="navbarNavAltMarkup"
+       aria-expanded="false"
+       aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav ms-auto align-items-md-center">
-          <a class="nav-link d-md-none" href="/listings">Explore</a>
-          <a class="nav-link me-md-2" href="/listings/new">Airbnb your Home</a>
+        <div class="navbar-nav ms-auto align-items-md-center pt-2 pt-md-0">
+          <a class="nav-link d-md-none mobile-nav-item py-2" href="/listings">
+            <i class="fa-solid fa-compass me-2 text-danger"></i>Explore All
+          </a>
+          <a class="nav-link d-sm-none mobile-nav-item py-2" href="/listings/new">
+            <i class="fa-solid fa-house-chimney me-2 text-danger"></i>Airbnb your Home
+          </a>
           <% if(!currentUser) { %>
-            <a class="nav-link me-md-2" href="/signup"><b>Sign Up</b></a>
-            <a class="nav-link" href="/login"><b>Log In</b></a>
+            <hr class="d-md-none my-2 text-muted opacity-25">
+            <a class="nav-link mobile-nav-item me-md-2 py-2" href="/signup">
+              <i class="fa-solid fa-user-plus d-md-none me-2 text-muted"></i><b>Sign Up</b>
+            </a>
+            <a class="nav-link mobile-nav-item py-2" href="/login">
+              <i class="fa-solid fa-right-to-bracket d-md-none me-2 text-muted"></i><b>Log In</b>
+            </a>
           <% } else { %>
-            <a class="nav-link" href="/logout"><b>Log Out</b></a>
+            <hr class="d-md-none my-2 text-muted opacity-25">
+            <span class="nav-link text-muted d-md-none py-1 small">Logged in as <b><%= currentUser.username %></b></span>
+            <a class="nav-link mobile-nav-item py-2 text-danger" href="/logout">
+              <i class="fa-solid fa-arrow-right-from-bracket me-2"></i><b>Log Out</b>
+            </a>
           <% } %>
         </div>
       </div>
+    </div>
+
+    <!-- Mobile Search Bar (Full Width on Phone / Extra Small devices) -->
+    <div class="navbar-search-mobile w-100 d-md-none mt-2 pb-2">
+      <form class="d-flex w-100" role="search" action="/listings" method="GET">
+        <div class="input-group search-bar-pill shadow-sm w-100">
+          <input class="form-control search-inp ps-3" type="search" name="search" placeholder="Search destinations..." aria-label="Search">
+          <button class="btn btn-search" type="submit" aria-label="Search button">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </nav>

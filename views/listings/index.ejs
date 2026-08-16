@@ -1,8 +1,9 @@
 <% layout("/layouts/boiler_plate")-%>
 
 <div class="filters-wrapper mb-4 mt-2">
-  <div class="filter-container d-flex align-items-center center justify-content-between">
-    <div class="filters-scroll-container position-relative flex-grow-1 me-3">
+  <div class="filter-container d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between gap-2 gap-md-3">
+    <!-- Category Horizontal Slider -->
+    <div class="filters-scroll-container position-relative flex-grow-1">
       <button class="filter-scroll-btn scroll-left d-none" id="scrollLeftBtn" type="button" aria-label="Scroll left">
         <i class="fa-solid fa-chevron-left"></i>
       </button>
@@ -105,17 +106,18 @@
       </button>
     </div>
 
-    <div class="tax-toggle">
-      <div class="form-check form-switch form-check-reverse m-0">
-        <input class="form-check-input" type="checkbox" role="switch" id="taxSwitch">
-        <label class="form-check-label small fw-semibold" for="taxSwitch">Display total after taxes</label>
+    <!-- Tax Toggle Switch -->
+    <div class="tax-toggle align-self-start align-self-md-center">
+      <div class="form-check form-switch form-check-reverse m-0 d-flex align-items-center justify-content-between w-100">
+        <input class="form-check-input ms-2" type="checkbox" role="switch" id="taxSwitch">
+        <label class="form-check-label small fw-semibold text-nowrap" for="taxSwitch">Display total after taxes</label>
       </div>
     </div>
   </div>
 </div>
 
 <% if (searchQuery || (selectedCategory && selectedCategory !== 'all')) { %>
-  <div class="category-status-bar d-flex align-items-center justify-content-between mb-3 px-3 py-2 bg-light rounded-3 border">
+  <div class="category-status-bar d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-2 mb-3 px-3 py-2 bg-light rounded-3 border">
     <div class="d-flex align-items-center flex-wrap gap-2">
       <% if (selectedCategory && selectedCategory !== 'all') { %>
         <span class="badge bg-dark rounded-pill px-3 py-2">
@@ -126,45 +128,47 @@
         <span class="text-muted small">Search: "<strong><%= searchQuery %></strong>"</span>
       <% } %>
     </div>
-    <a href="/listings" class="btn btn-sm btn-outline-secondary rounded-pill">
+    <a href="/listings" class="btn btn-sm btn-outline-secondary rounded-pill text-nowrap align-self-end align-self-sm-center">
       <i class="fa-solid fa-xmark me-1"></i>Clear all filters
     </a>
   </div>
 <% } %>
 
 <% if (allListings && allListings.length > 0) { %>
-  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4 mt-1 mb-5">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3 g-md-4 mt-1 mb-5">
     <% for(let listing of allListings){ %>
-      <a href="/listings/<%= listing._id %>" class="listing-link">
-        <div class="card col listing-card h-100">
-          <div class="listing-img-container position-relative">
-            <img src="<%= listing.image && listing.image.url ? listing.image.url : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3' %>" class="card-img-top" style="height:20rem" alt="listing_image">
-            <% if (listing.category) { %>
-              <span class="listing-category-badge position-absolute top-0 start-0 m-3 badge bg-white text-dark shadow-sm rounded-pill px-2 py-1">
-                <%= listing.category %>
-              </span>
-            <% } %>
-          </div>
-          <div class="card-body pt-2">
-            <p class="card-text mb-0 fw-bold text-dark">
-              <%= listing.title %>
-            </p>
-            <p class="card-text text-muted mb-0 small"><%= listing.location %>, <%= listing.country %></p>
-            <p class="card-text mt-2 mb-0">
-              <% if (listing.price != null) { %>
-                <span class="base-price fw-semibold">&#8377;<%= Number(listing.price).toLocaleString("en-IN") %> <span class="fw-normal text-muted">/ night</span></span>
-                <span class="tax-price d-none fw-semibold">&#8377;<%= Number(Math.round(listing.price * 1.18)).toLocaleString("en-IN") %> <span class="fw-normal text-muted">/ night (incl. 18% GST)</span></span>
-              <% } else { %>
-                <span class="text-muted">Price not available</span>
+      <div class="col">
+        <a href="/listings/<%= listing._id %>" class="listing-link">
+          <div class="card listing-card h-100">
+            <div class="listing-img-container position-relative overflow-hidden">
+              <img src="<%= listing.image && listing.image.url ? listing.image.url : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3' %>" class="card-img-top listing-card-img" alt="listing_image" loading="lazy">
+              <% if (listing.category) { %>
+                <span class="listing-category-badge position-absolute top-0 start-0 m-3 badge bg-white text-dark shadow-sm rounded-pill px-2 py-1">
+                  <%= listing.category %>
+                </span>
               <% } %>
-            </p>
+            </div>
+            <div class="card-body pt-2">
+              <p class="card-text mb-0 fw-bold text-dark text-truncate">
+                <%= listing.title %>
+              </p>
+              <p class="card-text text-muted mb-0 small text-truncate"><%= listing.location %>, <%= listing.country %></p>
+              <p class="card-text mt-2 mb-0">
+                <% if (listing.price != null) { %>
+                  <span class="base-price fw-semibold">&#8377;<%= Number(listing.price).toLocaleString("en-IN") %> <span class="fw-normal text-muted">/ night</span></span>
+                  <span class="tax-price d-none fw-semibold">&#8377;<%= Number(Math.round(listing.price * 1.18)).toLocaleString("en-IN") %> <span class="fw-normal text-muted">/ night (incl. 18% GST)</span></span>
+                <% } else { %>
+                  <span class="text-muted">Price not available</span>
+                <% } %>
+              </p>
+            </div>
           </div>
-        </div>
-      </a>
+        </a>
+      </div>
     <% } %>
   </div>
 <% } else { %>
-  <div class="text-center my-5 py-5 border rounded-4 bg-light">
+  <div class="text-center my-5 py-5 border rounded-4 bg-light px-3">
     <i class="fa-regular fa-compass fa-3x text-muted mb-3"></i>
     <h4>No listings found in <%= selectedCategory && selectedCategory !== 'all' ? selectedCategory : 'this search' %></h4>
     <p class="text-muted">Try selecting another category or clear your search query.</p>
